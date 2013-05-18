@@ -1,11 +1,29 @@
 {
-    "name": "recaptcha",
-    "description": "Display and verify a Recaptcha captcha",
-    "version": "1.2.0",
-    "author": "Michael Hampton <mirhampt+github@gmail.com>",
-    "main": "./lib/recaptcha.js",
-    "devDependencies": {
-      "nodeunit": "*"
-    },
-    "engines": { "node": ">= 0.6.0" }
+  "name": "re-captcha",
+  "description": "Display and verify a Recaptcha captcha",
+  "version": "0.0.1",
+  "author": "Michael Hampton <mirhampt+github@gmail.com>",
+  "main": "./lib/recaptcha.js",
+  "devDependencies": {
+    "nodeunit": "*"
+  },
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "readmeFilename": "README.md",
+  "gitHead": "aec21c46b559ff0e4eae5119c63dd4ea19eb286a",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/JacksonTian/node-recaptcha.git"
+  },
+  "keywords": [
+    "recaptcha"
+  ],
+  "license": "MIT"
 }
