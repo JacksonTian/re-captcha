@@ -1,4 +1,4 @@
-# re-captcha (Redesigned recaptcha module)
+# re-captcha (Redesigned recaptcha module) [![Build Status](https://secure.travis-ci.org/JacksonTian/re-captcha.png)](http://travis-ci.org/JacksonTian/re-captcha)
 ======
 
 recaptcha renders and verifies [Recaptcha](http://www.google.com/recaptcha) captchas.
@@ -6,6 +6,7 @@ recaptcha renders and verifies [Recaptcha](http://www.google.com/recaptcha) capt
 ## Installation
 
 Via npm:
+
 ```
 npm install re-captcha
 ```
