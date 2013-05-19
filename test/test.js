@@ -7,15 +7,15 @@ var querystring = require('querystring');
 describe('lib/recaptcha.js', function () {
   it('construction https', function () {
     var recaptcha = new Recaptcha('PUBLIC', 'PRIVATE', true);
-    assert.strictEqual(recaptcha.public_key, 'PUBLIC', 'public_key is set');
-    assert.strictEqual(recaptcha.private_key, 'PRIVATE', 'private_key is set');
+    assert.strictEqual(recaptcha.publicKey, 'PUBLIC', 'publicKey is set');
+    assert.strictEqual(recaptcha.privateKey, 'PRIVATE', 'privateKey is set');
     assert.strictEqual(recaptcha.protocol, 'https://', 'protocol is set');
   });
 
   it('construction http', function () {
     var recaptcha = new Recaptcha('PUBLIC', 'PRIVATE');
-    assert.strictEqual(recaptcha.public_key, 'PUBLIC', 'public_key is set');
-    assert.strictEqual(recaptcha.private_key, 'PRIVATE', 'private_key is set');
+    assert.strictEqual(recaptcha.publicKey, 'PUBLIC', 'publicKey is set');
+    assert.strictEqual(recaptcha.privateKey, 'PRIVATE', 'privateKey is set');
     assert.strictEqual(recaptcha.protocol, 'http://', 'protocol is not set');
   });
 
