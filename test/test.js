@@ -206,7 +206,7 @@ describe('lib/recaptcha.js', function () {
     };
 
     var response_data = 'false\nincorrect-captcha-sol';
-    var data_qs = querystring.stringify(data_with_pk);
+    var qs = querystring.stringify(data_with_pk);
     var end_called = false;
     var write_called = false;
 
@@ -215,22 +215,18 @@ describe('lib/recaptcha.js', function () {
     var fake_response = new events.EventEmitter();
 
     http.request = function (options, callback) {
-      assert.deepEqual(options, {
-        host: 'www.google.com',
-        path: '/recaptcha/api/verify',
-        port: 80,
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Content-Length': data_qs.length
-        }
-      }, 'options for request() call are correct');
+      assert.deepEqual(options.host, 'www.google.com', 'host should correct');
+      assert.deepEqual(options.path, '/recaptcha/api/verify', 'path should correct');
+      assert.deepEqual(options.port, 80, 'port should correct');
+      assert.deepEqual(options.method, 'POST', 'method should correct');
+      assert.deepEqual(options.headers['Content-Type'], 'application/x-www-form-urlencoded', 'type should correct');
+      assert.deepEqual(options.headers['Content-Length'], qs.length, 'length should correct');
 
       callback(fake_response);
       return fake_request;
     };
     fake_request.write = function (data) {
-      assert.strictEqual(data, data_qs, 'data correct in request.write() call');
+      assert.strictEqual(data, qs, 'data correct in request.write() call');
       write_called = true;
     };
     fake_request.end = function() { end_called = true; };
@@ -267,7 +263,7 @@ describe('lib/recaptcha.js', function () {
       privatekey: 'PRIVATE'
     };
 
-    var data_qs = querystring.stringify(data_with_pk);
+    var qs = querystring.stringify(data_with_pk);
     var end_called = false;
     var write_called = false;
 
@@ -276,22 +272,18 @@ describe('lib/recaptcha.js', function () {
     var fake_response = new events.EventEmitter();
 
     http.request = function (options, callback) {
-      assert.deepEqual(options, {
-        host: 'www.google.com',
-        path: '/recaptcha/api/verify',
-        port: 80,
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Content-Length': data_qs.length
-        }
-      }, 'options for request() call are correct');
+      assert.deepEqual(options.host, 'www.google.com', 'host should correct');
+      assert.deepEqual(options.path, '/recaptcha/api/verify', 'path should correct');
+      assert.deepEqual(options.port, 80, 'port should correct');
+      assert.deepEqual(options.method, 'POST', 'method should correct');
+      assert.deepEqual(options.headers['Content-Type'], 'application/x-www-form-urlencoded', 'type should correct');
+      assert.deepEqual(options.headers['Content-Length'], qs.length, 'length should correct');
 
       callback(fake_response);
       return fake_request;
     };
     fake_request.write = function (data) {
-      assert.strictEqual(data, data_qs, 'data correct in request.write() call');
+      assert.strictEqual(data, qs, 'data correct in request.write() call');
       write_called = true;
     };
     fake_request.end = function() { end_called = true; };
@@ -327,7 +319,7 @@ describe('lib/recaptcha.js', function () {
     };
 
     var response_data = 'true';
-    var data_qs = querystring.stringify(data_with_pk);
+    var qs = querystring.stringify(data_with_pk);
     var end_called = false;
     var write_called = false;
 
@@ -336,23 +328,19 @@ describe('lib/recaptcha.js', function () {
     var fake_response = new events.EventEmitter();
 
     http.request = function (options, callback) {
-      assert.deepEqual(options, {
-        host: 'www.google.com',
-        path: '/recaptcha/api/verify',
-        port: 80,
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Content-Length': data_qs.length
-        }
-      }, 'options for request() call are correct');
+      assert.deepEqual(options.host, 'www.google.com', 'host should correct');
+      assert.deepEqual(options.path, '/recaptcha/api/verify', 'path should correct');
+      assert.deepEqual(options.port, 80, 'port should correct');
+      assert.deepEqual(options.method, 'POST', 'method should correct');
+      assert.deepEqual(options.headers['Content-Type'], 'application/x-www-form-urlencoded', 'type should correct');
+      assert.deepEqual(options.headers['Content-Length'], qs.length, 'length should correct');
 
       callback(fake_response);
       return fake_request;
     };
 
     fake_request.write = function (data) {
-      assert.strictEqual(data, data_qs, 'data correct in request.write() call');
+      assert.strictEqual(data, qs, 'data correct in request.write() call');
       write_called = true;
     };
     fake_request.end = function() { end_called = true; };
