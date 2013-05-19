@@ -1,28 +1,19 @@
-# node-recaptcha
+# re-captcha (Redesigned recaptcha module)
+======
 
-node-recaptcha renders and verifies [Recaptcha](http://www.google.com/recaptcha) captchas.
+recaptcha renders and verifies [Recaptcha](http://www.google.com/recaptcha) captchas.
 
 ## Installation
 
-Via git:
-
-    $ git clone git://github.com/mirhampt/node-recaptcha.git ~/.node_libraries/node-recaptcha
-
 Via npm:
-
-    $ npm install recaptcha
+```
+npm install re-captcha
+```
 
 ## Setup
 
 Before you can use this module, you must visit http://www.google.com/recaptcha
 to request a public and private API key for your domain.
-
-## Running the Tests
-
-To run the tests for this module, you will first need to install
-[nodeunit](http://github.com/caolan/nodeunit).  Then, simply run:
-
-    $ nodeunit test.js
 
 ## Customizing the Recaptcha
 
@@ -30,74 +21,74 @@ See these [instructions](http://code.google.com/apis/recaptcha/docs/customizatio
 for help customizing the look of Recaptcha.  In brief, you will need to add a
 structure like the following before the form in your document:
 
-    <script type="text/javascript">
-        var RecaptchaOptions = {
-           theme : 'clean',
-           lang  : 'en'
-        };
-    </script>
+```
+<script>
+  var RecaptchaOptions = {
+   theme: 'clean',
+   lang: 'en'
+  };
+</script>
+```
 
-## Example Using [Express](http://www.expressjs.com)
+## Example Using Connect/Express
 
 app.js:
 
-    var express  = require('express'),
-        Recaptcha = require('recaptcha').Recaptcha;
+```js
+var express  = require('connect');
+var Recaptcha = require('re-captcha');
 
-    var PUBLIC_KEY  = 'YOUR_PUBLIC_KEY',
-        PRIVATE_KEY = 'YOUR_PRIVATE_KEY';
+var PUBLIC_KEY  = 'YOUR_PUBLIC_KEY';
+var PRIVATE_KEY = 'YOUR_PRIVATE_KEY';
+var recaptcha = new Recaptcha(PUBLIC_KEY, PRIVATE_KEY);
 
-    var app = express.createServer();
+var app = connect();
+app.use(connect.bodyParser());
+app.get('/', function(req, res) {
+  res.render('index', {
+    layout: false,
+    locals: {
+      recaptcha_form: recaptcha.toHTML()
+    }
+  });
+});
 
-    app.configure(function() {
-        app.use(express.bodyParser());
-    });
+app.post('/', function(req, res) {
+  var data = {
+    remoteip:  req.connection.remoteAddress,
+    challenge: req.body.recaptcha_challenge_field,
+    response:  req.body.recaptcha_response_field
+  };
 
-    app.get('/', function(req, res) {
-        var recaptcha = new Recaptcha(PUBLIC_KEY, PRIVATE_KEY);
+  recaptcha.verify(data, function(err) {
+    if (err) {
+      // Redisplay the form.
+      res.render('form.html', {
+        layout: false,
+        locals: {
+          recaptcha_form: recaptcha.toHTML(err)
+        }
+      });
+    } else {
+      res.send('Recaptcha response valid.');
+    }
+  });
+});
 
-        res.render('form.jade', {
-            layout: false,
-            locals: {
-                recaptcha_form: recaptcha.toHTML()
-            }
-        });
-    });
+http.createServer(app).listen(3000);
+```
 
-    app.post('/', function(req, res) {
-        var data = {
-            remoteip:  req.connection.remoteAddress,
-            challenge: req.body.recaptcha_challenge_field,
-            response:  req.body.recaptcha_response_field
-        };
-        var recaptcha = new Recaptcha(PUBLIC_KEY, PRIVATE_KEY, data);
+views/form.html:
 
-        recaptcha.verify(function(success, error_code) {
-            if (success) {
-                res.send('Recaptcha response valid.');
-            }
-            else {
-                // Redisplay the form.
-                res.render('form.jade', {
-                    layout: false,
-                    locals: {
-                        recaptcha_form: recaptcha.toHTML()
-                    }
-                });
-            }
-        });
-    });
+```html
+<form method="POST" action=".">
+  <%-recaptcha_form%>
+  <input type="submit">
+</form>
+```
 
-    app.listen(3000);
+Make sure connect and EJS are installed, then:
 
-views/form.jade:
-
-    form(method='POST', action='.')
-      != recaptcha_form
-
-      input(type='submit', value='Check Recaptcha')
-
-Make sure [express](http://www.expressjs.com) and [jade](http://jade-lang.com)
-are installed, then:
-
-    $ node app.js
+```bash
+$ node app.js
+```

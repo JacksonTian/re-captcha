@@ -2,10 +2,11 @@
   "name": "re-captcha",
   "description": "Display and verify a Recaptcha captcha",
   "version": "0.0.2",
-  "author": "Michael Hampton <mirhampt+github@gmail.com>",
+  "author": "Jackson Tian <shyvo1987@gmail.com>",
   "main": "./lib/recaptcha.js",
   "devDependencies": {
-    "nodeunit": "*"
+    "mocha": "*",
+    "should": "*"
   },
   "engines": {
     "node": ">= 0.8.0"
@@ -16,11 +17,11 @@
     "example": "examples"
   },
   "scripts": {
-    "test": "npm test"
+    "test": "./node_modules/mocha/bin/mocha -R spec"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/JacksonTian/node-recaptcha.git"
+    "url": "git://github.com/JacksonTian/re-captcha.git"
   },
   "keywords": [
     "recaptcha"
