@@ -1,6 +1,5 @@
 {
   "predef": [
-    "document",
     "module",
     "require",
     "__dirname",
@@ -13,10 +12,8 @@
     "before",
     "beforeEach",
     "after",
-    "afterEach",
-    "should"
+    "afterEach"
   ],
-
   "node": true,
   "es5": true,
   "bitwise": true,
