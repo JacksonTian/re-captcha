@@ -1,4 +1,4 @@
-# re-captcha (Redesigned recaptcha module) [![Build Status](https://secure.travis-ci.org/JacksonTian/re-captcha.png)](http://travis-ci.org/JacksonTian/re-captcha)
+re-captcha [![Build Status](https://secure.travis-ci.org/JacksonTian/re-captcha.png)](http://travis-ci.org/JacksonTian/re-captcha)
 ======
 
 recaptcha renders and verifies [Recaptcha](http://www.google.com/recaptcha) captchas.
