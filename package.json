@@ -14,10 +14,19 @@
   "readmeFilename": "README.md",
   "gitHead": "aec21c46b559ff0e4eae5119c63dd4ea19eb286a",
   "directories": {
-    "example": "examples"
+    "test": "test"
   },
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha -R spec"
+    "test": "make test-all",
+    "blanket": {
+      "pattern": "re-captcha/lib",
+      "data-cover-flags": {
+        "debug": false
+      }
+    },
+    "travis-cov": {
+      "threshold": 70
+    }
   },
   "repository": {
     "type": "git",
@@ -26,5 +35,11 @@
   "keywords": [
     "recaptcha"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "blanket": "~1.1.4",
+    "debug": "~0.7.0",
+    "should": "~1.2.1",
+    "travis-cov": "~0.2.4"
+  }
 }

@@ -91,7 +91,7 @@ describe('lib/recaptcha.js', function () {
     var create_client_called = false;
 
     // We shouldn't need to contact Recaptcha to know this is invalid.
-    http.request = function (options) {
+    http.request = function () {
       create_client_called = true;
     };
 
@@ -134,7 +134,7 @@ describe('lib/recaptcha.js', function () {
     var create_client_called = false;
 
     // We shouldn't need to contact Recaptcha to know this is invalid.
-    http.request = function (options) {
+    http.request = function () {
       create_client_called = true;
     };
 
@@ -155,7 +155,7 @@ describe('lib/recaptcha.js', function () {
     var create_client_called = false;
 
     // We shouldn't need to contact Recaptcha to know this is invalid.
-    http.request = function(options, callback) {
+    http.request = function () {
       create_client_called = true;
     };
 
@@ -176,7 +176,7 @@ describe('lib/recaptcha.js', function () {
     var create_client_called = false;
 
     // We shouldn't need to contact Recaptcha to know this is invalid.
-    http.request = function(options, callback) {
+    http.request = function () {
       create_client_called = true;
     };
 
@@ -199,9 +199,9 @@ describe('lib/recaptcha.js', function () {
     var recaptcha = new Recaptcha('PUBLIC', 'PRIVATE');
 
     var data_with_pk = {
-      remoteip: data['remoteip'],
-      challenge: data['challenge'],
-      response: data['response'],
+      remoteip: data.remoteip,
+      challenge: data.challenge,
+      response: data.response,
       privatekey: 'PRIVATE'
     };
 
@@ -211,7 +211,6 @@ describe('lib/recaptcha.js', function () {
     var write_called = false;
 
     // Stub out communication with Recaptcha.
-    var fake_client = {};
     var fake_request = new events.EventEmitter();
     var fake_response = new events.EventEmitter();
 
@@ -253,6 +252,65 @@ describe('lib/recaptcha.js', function () {
     fake_response.emit('end');
   });
 
+  it('verify() with no network', function (done) {
+    var data = {
+      remoteip: '127.0.0.1',
+      challenge: 'challenge',
+      response: 'bad_response'
+    };
+    var recaptcha = new Recaptcha('PUBLIC', 'PRIVATE');
+
+    var data_with_pk = {
+      remoteip: data.remoteip,
+      challenge: data.challenge,
+      response: data.response,
+      privatekey: 'PRIVATE'
+    };
+
+    var data_qs = querystring.stringify(data_with_pk);
+    var end_called = false;
+    var write_called = false;
+
+    // Stub out communication with Recaptcha.
+    var fake_request = new events.EventEmitter();
+    var fake_response = new events.EventEmitter();
+
+    http.request = function (options, callback) {
+      assert.deepEqual(options, {
+        host: 'www.google.com',
+        path: '/recaptcha/api/verify',
+        port: 80,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Length': data_qs.length
+        }
+      }, 'options for request() call are correct');
+
+      callback(fake_response);
+      return fake_request;
+    };
+    fake_request.write = function (data) {
+      assert.strictEqual(data, data_qs, 'data correct in request.write() call');
+      write_called = true;
+    };
+    fake_request.end = function() { end_called = true; };
+
+    // Check callback values for verify.
+    recaptcha.verify(data, function (err) {
+      assert.strictEqual(err.message, 'recaptcha-not-reachable', 'error message is correct');
+      // Make sure that request.write() and request.end() were called.
+      assert.strictEqual(write_called, true, 'request.write() was called');
+      assert.strictEqual(end_called, true, 'request.end() was called');
+
+      done();
+    });
+
+    // Emit the signals to mimic getting data from Recaptcha.
+    fake_request.emit('response', fake_response);
+    fake_response.emit('error', new Error('net error'));
+  });
+
   it('verify() with good data', function (done) {
     var data = {
       remoteip:  '127.0.0.1',
@@ -262,9 +320,9 @@ describe('lib/recaptcha.js', function () {
     var recaptcha = new Recaptcha('PUBLIC', 'PRIVATE');
 
     var data_with_pk = {
-      remoteip: data['remoteip'],
-      challenge: data['challenge'],
-      response: data['response'],
+      remoteip: data.remoteip,
+      challenge: data.challenge,
+      response: data.response,
       privatekey: 'PRIVATE'
     };
 
@@ -274,7 +332,6 @@ describe('lib/recaptcha.js', function () {
     var write_called = false;
 
     // Stub out communication with Recaptcha.
-    var fake_client = {};
     var fake_request = new events.EventEmitter();
     var fake_response = new events.EventEmitter();
 
