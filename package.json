@@ -36,7 +36,7 @@
     "recaptcha"
   ],
   "license": "MIT",
-  "dependencies": {
+  "devDependencies": {
     "blanket": "~1.1.4",
     "debug": "~0.7.0",
     "should": "~1.2.1",
